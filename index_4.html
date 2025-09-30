@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSI Generator Service Planning Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .control-panel {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .service-grid {
+            display: grid;
+            /* Use a slightly smaller min-width for more flexibility */
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .service-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .service-card.disabled {
+            opacity: 0.5;
+            background: #f5f5f5;
+        }
+        
+        .service-card.optimized {
+            border-color: #28a745;
+            background: linear-gradient(to bottom, #ffffff, #f0fff4);
+        }
+        
+        .service-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .service-title {
+            font-weight: 600;
+            color: #333;
+            font-size: 1em;
+        }
+        
+        .switch-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .switch {
+            position: relative;
+            width: 48px;
+            height: 24px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #667eea;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+        
+        .service-inputs {
+            display: grid;
+            /* FIX: Changed to 1fr grid to force vertical stacking by default for better control and clean layout */
+            grid-template-columns: 1fr; 
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .input-group label {
+            font-size: 0.85em;
+            color: #555;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .input-group input, .input-group select {
+            padding: 8px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .input-group input:disabled {
+            background: #f0f0f0;
+            cursor: not-allowed;
+        }
+        
+        .input-group small {
+            margin-top: 5px;
+            color: #888;
+            font-size: 0.75em;
+        }
+        
+        .service-stats {
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.85em;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+        }
+        
+        .stat-label {
+            color: #666;
+        }
+        
+        .stat-value {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 15px 0;
+            font-size: 1.2em;
+        }
+        
+        .btn-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .scenario-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .scenario-btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 10px;
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .scenario-btn:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+        }
+        
+        .scenario-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .scenario-title {
+            font-weight: 600;
+            font-size: 0.9em;
+            margin-bottom: 3px;
+        }
+        
+        .scenario-desc {
+            font-size: 0.75em;
+            opacity: 0.8;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .metric-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .metric-card.primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .metric-card.success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+        
+        .metric-card.warning {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        
+        .metric-card.info {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+        
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .metric-detail {
+            font-size: 0.8em;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 1200px) {
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        canvas {
+            max-height: 400px;
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        tr.disabled {
+            opacity: 0.4;
+            background: #f5f5f5;
+        }
+        
+        tr.total-row {
+            background: #e8f4f8;
+            font-weight: 600;
+        }
+        
+        .savings-alert {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-left: 5px solid #28a745;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: none;
+        }
+        
+        .savings-alert.show {
+            display: block;
+        }
+        
+        .savings-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #155724;
+            margin-bottom: 10px;
+        }
+        
+        .savings-details {
+            color: #155724;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 PSI 53L Generator Service Planning Dashboard</h1>
+        
+        <div class="control-panel">
+            <h2>Configuration Parameters</h2>
+            
+            <h3>Fleet Configuration</h3>
+            <div class="control-grid">
+                <div class="input-group">
+                    <label>Total Fleet Size</label>
+                    <input type="number" id="totalUnits" value="1000" min="1">
+                    <small>Target number of units</small>
+                </div>
+                <div class="input-group">
+                    <label>Units per Month</label>
+                    <input type="number" id="unitsPerMonth" value="50" min="1">
+                    <small>Commissioning rate</small>
+                </div>
+                <div class="input-group">
+                    <label>Annual Runtime (hrs)</label>
+                    <input type="number" id="annualRuntime" value="6500" min="1">
+                    <small>Hours per year per unit</small>
+                </div>
+                <div class="input-group">
+                    <label>Working Days/Year</label>
+                    <input type="number" id="workingDays" value="250" min="200" max="365">
+                    <small>Excluding weekends/holidays</small>
+                </div>
+                <div class="input-group">
+                    <label>Hours per Day</label>
+                    <input type="number" id="hoursPerDay" value="8" min="1" max="24">
+                    <small>Standard shift</small>
+                </div>
+                <div class="input-group">
+                    <label>Target Utilization (%)</label>
+                    <input type="number" id="targetUtilization" value="75" min="50" max="95">
+                    <small>Productive time</small>
+                </div>
+            </div>
+            
+            <h3>Service Interval Presets</h3>
+            <div class="scenario-buttons">
+                <div class="scenario-btn active" id="preset-oem">
+                    <div class="scenario-title">OEM Baseline</div>
+                    <div class="scenario-desc">Standard intervals</div>
+                </div>
+                <div class="scenario-btn" id="preset-optimized">
+                    <div class="scenario-title">Optimized</div>
+                    <div class="scenario-desc">+30% extension</div>
+                </div>
+                <div class="scenario-btn" id="preset-aggressive">
+                    <div class="scenario-title">Aggressive</div>
+                    <div class="scenario-desc">Maximum extension</div>
+                </div>
+                <div class="scenario-btn" id="preset-minimal">
+                    <div class="scenario-title">Minimal</div>
+                    <div class="scenario-desc">Essential only</div>
+                </div>
+            </div>
+            
+            <h3>Service Intervals - Full Control</h3>
+            <div class="service-grid">
+                <div class="service-card" id="card-initial">
+                    <div class="service-header">
+                        <span class="service-title">Initial 50 Hour</span>
+                        <div class="switch-container">
+                            <span style="font-size: 0.8em;">Enable</span>
+                            <label class="switch">
+                                <input type="checkbox" id="enable-initial" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="service-inputs">
+                        <div class="input-group">
+                            <label>Interval (hrs)</label>
+                            <input type="number" id="interval-initial" value="50" disabled>
+                        </div>
+                        <div class="input-group">
+                            <label>Labor (hrs)</label>
+                            <input type="number" id="hours-initial" value="17.2" step="0.1">
+                        </div>
+                    </div>
+                    <div class="service-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Type:</span>
+                            <span class="stat-value">One-time</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Total Services:</span>
+                            <span class="stat-value" id="stat-initial">1,000</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="service-card disabled" id="card-daily">
+                    <div class="service-header">
+                        <span class="service-title">Daily Checks</span>
+                        <div class="switch-container">
+                            <span style="font-size: 0.8em;">Enable</span>
+                            <label class="switch">
+                                <input type="checkbox" id="enable-daily">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="service-inputs">
+                        <div class="input-group">
+                            <label>Interval (hrs)</label>
+                            <input type="number" id="interval-daily" value="24" disabled>
+                        </div>
+                        <div class="input-group">
+                            <label>Labor (hrs)</label>
+                            <input type="number" id="hours-daily" value="0.9" disabled>
+                        </div>
+                    </div>
+                    <div class="service-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Status:</span>
+                            <span class="stat-value" style="color: #28a745;">AUTOMATED</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Method:</span>
+                            <span class="stat-value">Sensors</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="service-card" id="card-250">
+                    <div class="service-header">
+                        <span class="service-title">250 Hour Service</span>
+                        <div class="switch-container">
+                            <span style="font-size: 0.8em;">Enable</span>
+                            <label class="switch">
+                                <input type="checkbox" id="enable-250" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="service-inputs">
+                        <div class="input-group">
+                            <label>Interval (hrs)</label>
+                            <input type="number" id="interval-250" value="250" min="100" max="500" step="50">
+                        </div>
+                        <div class="input-group">
+                            <label>Labor (hrs)</label>
+                            <input type="number" id="hours-250" value="0.9" step="0.1">
+                        </div>
+                    </div>
+                    <div class="service-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Services/Year:</span>
+                            <span class="stat-value" id="stat-250">26,000</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Total Hours:</span>
+                            <span class="stat-value" id="stat-250-hours">23,400</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="service-card" id="card-750">
+                    <div class="service-header">
+                        <span class="service-title">750 Hour Service</span>
+                        <div class="switch-container">
+                            <span style="font-size: 0.8em;">Enable</span>
+                            <label class="switch">
+                                <input type="checkbox" id="enable-750" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="service-inputs">
+                        <div class="input-group">
+                            <label>Interval (hrs)</label>
+                            <input type="number" id="interval-750" value="750" min="500" max="1500" step="50">
+                        </div>
+                        <div class="input-group">
+                            <label>Labor (hrs)</label>
+                            <input type="number" id="hours-750" value="14.7" step="0.1">
+                        </div>
+                    </div>
+                    <div class="service-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Services/Year:</span>
+                            <span class="stat-value" id="stat-750">8,667</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Total Hours:</span>
+                            <span class="stat-value" id="stat-750-hours">127,405</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="service-card" id="card-6500">
+                    <div class="service-header">
+                        <span class="service-title">6500 Hour Service</span>
+                        <div class="switch-container">
+                            <span style="font-size: 0.8em;">Enable</span>
+                            <label class="switch">
+                                <input type="checkbox" id="enable-6500" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="service-inputs">
+                        <div class="input-group">
+                            <label>Interval (hrs)</label>
+                            <input type="number" id="interval-6500" value="6500" min="5000" max="12000" step="500">
+                        </div>
+                        <div class="input-group">
+                            <label>Labor (hrs)</label>
+                            <input type="number" id="hours-6500" value="20" step="0.5">
+                        </div>
+                    </div>
+                    <div class="service-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Services/Year:</span>
+                            <span class="stat-value" id="stat-6500">1,000</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Total Hours:</span>
+                            <span class="stat-value" id="stat-6500-hours">20,000</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="service-card" id="card-8760">
+                    <div class="service-header">
+                        <span class="service-title">8760 Hour (Annual)</span>
+                        <div class="switch-container">
+                            <span style="font-size: 0.8em;">Enable</span>
+                            <label class="switch">
+                                <input type="checkbox" id="enable-8760" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="service-inputs">
+                        <div class="input-group">
+                            <label>Interval (hrs)</label>
+                            <input type="number" id="interval-8760" value="8760" disabled>
+                        </div>
+                        <div class="input-group">
+                            <label>Labor (hrs)</label>
+                            <input type="number" id="hours-8760" value="10.7" step="0.1">
+                        </div>
+                    </div>
+                    <div class="service-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Services/Year:</span>
+                            <span class="stat-value" id="stat-8760">743</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Total Hours:</span>
+                            <span class="stat-value" id="stat-8760-hours">7,950</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="service-card" id="card-20000">
+                    <div class="service-header">
+                        <span class="service-title">20,000 Hour Top End</span>
+                        <div class="switch-container">
+                            <span style="font-size: 0.8em;">Enable</span>
+                            <label class="switch">
+                                <input type="checkbox" id="enable-20000" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="service-inputs">
+                        <div class="input-group">
+                            <label>Interval (hrs)</label>
+                            <input type="number" id="interval-20000" value="20000" min="15000" max="30000" step="1000">
+                        </div>
+                        <div class="input-group">
+                            <label>Labor (hrs)</label>
+                            <input type="number" id="hours-20000" value="82.7" step="1">
+                        </div>
+                    </div>
+                    <div class="service-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Services/Year:</span>
+                            <span class="stat-value" id="stat-20000">325</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Total Hours:</span>
+                            <span class="stat-value" id="stat-20000-hours">26,878</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="service-card" id="card-40000">
+                    <div class="service-header">
+                        <span class="service-title">40,000 Hour Overhaul</span>
+                        <div class="switch-container">
+                            <span style="font-size: 0.8em;">Enable</span>
+                            <label class="switch">
+                                <input type="checkbox" id="enable-40000" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="service-inputs">
+                        <div class="input-group">
+                            <label>Interval (hrs)</label>
+                            <input type="number" id="interval-40000" value="40000" min="30000" max="60000" step="5000">
+                        </div>
+                        <div class="input-group">
+                            <label>Labor (hrs)</label>
+                            <input type="number" id="hours-40000" value="182" step="1">
+                        </div>
+                    </div>
+                    <div class="service-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Services/Year:</span>
+                            <span class="stat-value" id="stat-40000">163</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Total Hours:</span>
+                            <span class="stat-value" id="stat-40000-hours">29,666</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="btn-container">
+                <button class="btn btn-primary" onclick="calculatePlan()">Calculate Plan</button>
+                <button class="btn btn-secondary" onclick="resetDefaults()">Reset to OEM</button>
+                <button class="btn btn-success" onclick="compareScenarios()">Compare Scenarios</button>
+            </div>
+        </div>
+        
+        <div id="savingsAlert" class="savings-alert">
+            <div class="savings-value">💰 Total Savings: <span id="savingsAmount">$0M</span> Annually</div>
+            <div class="savings-details" id="savingsDetails"></div>
+        </div>
+        
+        <div class="metrics-grid">
+            <div class="metric-card primary">
+                <div class="metric-value" id="techsRequired">0</div>
+                <div class="metric-label">Technicians Required</div>
+                <div class="metric-detail" id="techDetail"></div>
+            </div>
+            <div class="metric-card success">
+                <div class="metric-value" id="annualServices">0</div>
+                <div class="metric-label">Annual Services</div>
+                <div class="metric-detail" id="serviceDetail"></div>
+            </div>
+            <div class="metric-card info">
+                <div class="metric-value" id="totalHours">0</div>
+                <div class="metric-label">Total Labor Hours</div>
+                <div class="metric-detail" id="hoursDetail"></div>
+            </div>
+            <div class="metric-card warning">
+                <div class="metric-value" id="totalCost">$0M</div>
+                <div class="metric-label">Annual O&M Cost</div>
+                <div class="metric-detail" id="costDetail"></div>
+            </div>
+        </div>
+        
+        <div class="chart-grid">
+            <div class="chart-container">
+                <h3>Service Distribution</h3>
+                <canvas id="serviceChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3>Labor Hours by Service Type</h3>
+                <canvas id="laborChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <h3>Technician Requirements Over Time</h3>
+            <canvas id="staffingChart"></canvas>
+        </div>
+        
+        <div class="table-container">
+            <h3>Service Schedule Summary</h3>
+            <table id="summaryTable">
+                <thead>
+                    <tr>
+                        <th>Service Type</th>
+                        <th>Status</th>
+                        <th>Interval (hrs)</th>
+                        <th>Services/Year</th>
+                        <th>Labor hrs/Service</th>
+                        <th>Total Hours</th>
+                        <th>% of Workload</th>
+                    </tr>
+                </thead>
+                <tbody id="summaryTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+        let serviceChart, laborChart, staffingChart;
+        let baselineData = {
+            techs: 124,
+            services: 37357,
+            hours: 241749,
+            cost: 29400000
+        };
+        
+        // Initialize charts
+        function initCharts() {
+            // Service distribution chart
+            serviceChart = new Chart(document.getElementById('serviceChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        backgroundColor: [
+                            '#667eea', '#764ba2', '#f093fb', '#f5576c',
+                            '#4facfe', '#00f2fe', '#43e97b', '#38f9d7'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+            
+            // Labor hours chart
+            laborChart = new Chart(document.getElementById('laborChart'), {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Labor Hours',
+                        data: [],
+                        backgroundColor: '#667eea'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+            
+            // Staffing chart
+            staffingChart = new Chart(document.getElementById('staffingChart'), {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Technicians Required',
+                        data: [],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Toggle service interval
+        function toggleService(serviceId) {
+            const checkbox = document.getElementById(`enable-${serviceId}`);
+            const card = document.getElementById(`card-${serviceId}`);
+            const intervalInput = document.getElementById(`interval-${serviceId}`);
+            const hoursInput = document.getElementById(`hours-${serviceId}`);
+            
+            if (checkbox) {
+                if (checkbox.checked) {
+                    card.classList.remove('disabled');
+                    if (serviceId !== 'initial' && serviceId !== '8760' && serviceId !== 'daily' && intervalInput) {
+                        intervalInput.disabled = false;
+                    }
+                    if (serviceId !== 'daily' && hoursInput) {
+                        hoursInput.disabled = false;
+                    }
+                } else {
+                    card.classList.add('disabled');
+                    if (intervalInput) intervalInput.disabled = true;
+                    if (hoursInput) hoursInput.disabled = true;
+                }
+            }
+        }
+        
+        // Calculate the service plan
+        function calculatePlan() {
+            const totalUnits = parseInt(document.getElementById('totalUnits').value);
+            const unitsPerMonth = parseInt(document.getElementById('unitsPerMonth').value);
+            const annualRuntime = parseInt(document.getElementById('annualRuntime').value);
+            const workingDays = parseInt(document.getElementById('workingDays').value);
+            const hoursPerDay = parseInt(document.getElementById('hoursPerDay').value);
+            const utilization = parseInt(document.getElementById('targetUtilization').value) / 100;
+            
+            let totalServices = 0;
+            let totalLaborHours = 0;
+            const serviceData = [];
+            const laborData = [];
+            
+            // Calculate for each service interval
+            const services = [
+                {id: 'initial', name: 'Initial 50hr', oneTime: true},
+                {id: 'daily', name: 'Daily Checks', automated: true},
+                {id: '250', name: '250 Hour'},
+                {id: '750', name: '750 Hour'},
+                {id: '6500', name: '6500 Hour'},
+                {id: '8760', name: 'Annual'},
+                {id: '20000', name: 'Top End'},
+                {id: '40000', name: 'Overhaul'}
+            ];
+            
+            let tableHTML = '';
+            
+            services.forEach(service => {
+                const enabled = document.getElementById(`enable-${service.id}`) ? document.getElementById(`enable-${service.id}`).checked : false;
+                
+                let servicesPerYear = 0;
+                let hoursPerYear = 0;
+                let interval = document.getElementById(`interval-${service.id}`) ? parseInt(document.getElementById(`interval-${service.id}`).value) : 0;
+                let laborHours = document.getElementById(`hours-${service.id}`) ? parseFloat(document.getElementById(`hours-${service.id}`).value) : 0;
+                
+                // --- CALCULATION LOGIC ---
+                if (service.automated) {
+                    // Daily checks are always considered automated and have 0 labor hours
+                    servicesPerYear = Math.round(totalUnits * annualRuntime / (interval || 24)); // Services still calculated for reference
+                    hoursPerYear = 0; // Labor hours are 0 for automated
+                } else if (enabled) {
+                    
+                    if (service.oneTime) {
+                        servicesPerYear = totalUnits;
+                        hoursPerYear = (totalUnits * laborHours) / 3; // Spread over 3 years for annual hours
+                    } else {
+                        // Regular recurring service
+                        servicesPerYear = Math.round(totalUnits * annualRuntime / interval);
+                        hoursPerYear = servicesPerYear * laborHours;
+                    }
+                    
+                    totalServices += servicesPerYear;
+                    totalLaborHours += hoursPerYear;
+                    
+                    serviceData.push({name: service.name, value: servicesPerYear});
+                    laborData.push({name: service.name, value: hoursPerYear});
+                }
+                // --- END CALCULATION LOGIC ---
+                
+                
+                // --- UPDATE STATS ---
+                
+                // Update stats in the card
+                const statElement = document.getElementById(`stat-${service.id}`);
+                if (statElement) {
+                    statElement.textContent = servicesPerYear.toLocaleString();
+                }
+                const hoursElement = document.getElementById(`stat-${service.id}-hours`);
+                if (hoursElement) {
+                    hoursElement.textContent = Math.round(hoursPerYear).toLocaleString();
+                }
+
+                
+                // --- UPDATE TABLE HTML ---
+
+                if (service.automated) {
+                    // Daily checks always appear as a disabled/automated row but don't add to totals
+                    tableHTML += `
+                        <tr class="disabled">
+                            <td>${service.name}</td>
+                            <td>🤖 Automated</td>
+                            <td>${interval || 24}</td>
+                            <td>${servicesPerYear.toLocaleString()}</td>
+                            <td>${laborHours}</td>
+                            <td>0</td>
+                            <td>0%</td>
+                        </tr>
+                    `;
+                } else if (enabled) {
+                    // Ensure totalLaborHours is not zero before division
+                    const percentage = totalLaborHours > 0 ? (hoursPerYear / totalLaborHours * 100).toFixed(1) : '0.0';
+                    
+                    tableHTML += `
+                        <tr>
+                            <td>${service.name}</td>
+                            <td>✅ Active</td>
+                            <td>${interval.toLocaleString()}</td>
+                            <td>${servicesPerYear.toLocaleString()}</td>
+                            <td>${laborHours}</td>
+                            <td>${Math.round(hoursPerYear).toLocaleString()}</td>
+                            <td>${percentage}%</td>
+                        </tr>
+                    `;
+                } else {
+                    tableHTML += `
+                        <tr class="disabled">
+                            <td>${service.name}</td>
+                            <td>❌ Disabled</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                    `;
+                }
+            });
+            
+            // Add total row
+            tableHTML += `
+                <tr class="total-row">
+                    <td><strong>TOTAL</strong></td>
+                    <td><strong>-</strong></td>
+                    <td><strong>-</strong></td>
+                    <td><strong>${totalServices.toLocaleString()}</strong></td>
+                    <td><strong>-</strong></td>
+                    <td><strong>${Math.round(totalLaborHours).toLocaleString()}</strong></td>
+                    <td><strong>100%</strong></td>
+                </tr>
+            `;
+            
+            document.getElementById('summaryTableBody').innerHTML = tableHTML;
+            
+            // Calculate technicians
+            const availableHours = workingDays * hoursPerDay * utilization;
+            const techsRequired = Math.ceil(totalLaborHours / availableHours * 1.15); // 15% contingency
+            
+            // Calculate costs
+            const laborCost = totalLaborHours * 120;
+            const partsCost = laborCost * 0.35;
+            const totalOMCost = laborCost + partsCost + (laborCost + partsCost) * 0.15;
+            
+            // Calculate savings
+            const techSavings = baselineData.techs - techsRequired;
+            const hoursSavings = baselineData.hours - totalLaborHours;
+            const costSavings = baselineData.cost - totalOMCost;
+            
+            // Update metrics
+            document.getElementById('techsRequired').textContent = techsRequired;
+            document.getElementById('annualServices').textContent = totalServices.toLocaleString();
+            document.getElementById('totalHours').textContent = Math.round(totalLaborHours).toLocaleString();
+            document.getElementById('totalCost').textContent = `$${(totalOMCost / 1000000).toFixed(1)}M`;
+            
+            // Update details
+            document.getElementById('techDetail').textContent = techSavings > 0 ? 
+                `${techSavings} fewer than baseline` : (techSavings < 0 ? `${Math.abs(techSavings)} more than baseline` : 'At baseline');
+            document.getElementById('hoursDetail').textContent = hoursSavings > 0 ? 
+                `${Math.round(hoursSavings).toLocaleString()} hrs saved` : (hoursSavings < 0 ? `${Math.round(Math.abs(hoursSavings)).toLocaleString()} hrs increase` : 'At baseline');
+            document.getElementById('costDetail').textContent = costSavings > 0 ? 
+                `$${(costSavings / 1000000).toFixed(1)}M saved` : (costSavings < 0 ? `$${(Math.abs(costSavings) / 1000000).toFixed(1)}M increase` : 'At baseline');
+            
+            // Show savings alert if significant
+            if (costSavings > 1000000) {
+                document.getElementById('savingsAlert').classList.add('show');
+                document.getElementById('savingsAmount').textContent = `$${(costSavings / 1000000).toFixed(1)}M`;
+                document.getElementById('savingsDetails').textContent = 
+                    `${techSavings} fewer technicians | ${Math.round(hoursSavings).toLocaleString()} fewer labor hours`;
+            } else {
+                document.getElementById('savingsAlert').classList.remove('show');
+            }
+            
+            // Update charts
+            serviceChart.data.labels = serviceData.map(d => d.name);
+            serviceChart.data.datasets[0].data = serviceData.map(d => d.value);
+            serviceChart.update();
+            
+            laborChart.data.labels = laborData.map(d => d.name);
+            laborChart.data.datasets[0].data = laborData.map(d => Math.round(d.value));
+            laborChart.update();
+            
+            // Update staffing chart
+            const months = Math.ceil(totalUnits / unitsPerMonth);
+            const monthLabels = [];
+            const techData = [];
+            
+            for (let i = 1; i <= Math.min(24, months + 6); i++) {
+                monthLabels.push(`Month ${i}`);
+                const unitsActive = Math.min(totalUnits, unitsPerMonth * i);
+                const proportionalTechs = Math.ceil((unitsActive / totalUnits) * techsRequired);
+                techData.push(proportionalTechs);
+            }
+            
+            staffingChart.data.labels = monthLabels;
+            staffingChart.data.datasets[0].data = techData;
+            staffingChart.update();
+        }
+        
+        // Load preset scenarios
+        function loadPreset(preset) {
+            const presets = {
+                oem: {
+                    '250': 250, '750': 750, '6500': 6500, '20000': 20000, '40000': 40000
+                },
+                optimized: {
+                    '250': 325, '750': 975, '6500': 8450, '20000': 26000, '40000': 52000
+                },
+                aggressive: {
+                    '250': 375, '750': 1300, '6500': 10000, '20000': 30000, '40000': 60000
+                },
+                minimal: {
+                    '250': 250, '750': 1000, '6500': 6500, '20000': 25000, '40000': 40000
+                }
+            };
+            
+            const intervals = presets[preset];
+            if (intervals) {
+                Object.keys(intervals).forEach(key => {
+                    const inputElement = document.getElementById(`interval-${key}`);
+                    if (inputElement) {
+                        inputElement.value = intervals[key];
+                    }
+                });
+                
+                // Handle enabling/disabling based on preset
+                const enableInitial = document.getElementById('enable-initial');
+                const enable250 = document.getElementById('enable-250');
+                const enable750 = document.getElementById('enable-750');
+                const enable6500 = document.getElementById('enable-6500');
+                const enable8760 = document.getElementById('enable-8760');
+                const enable20000 = document.getElementById('enable-20000');
+                const enable40000 = document.getElementById('enable-40000');
+
+
+                if (preset === 'minimal') {
+                    if (enableInitial) enableInitial.checked = false;
+                    if (enable250) enable250.checked = false;
+                    if (enable750) enable750.checked = true; // Minimal has 750 (with new value)
+                    if (enable6500) enable6500.checked = false;
+                    if (enable8760) enable8760.checked = true;
+                    if (enable20000) enable20000.checked = false;
+                    if (enable40000) enable40000.checked = false;
+                } else {
+                    if (enableInitial) enableInitial.checked = true;
+                    if (enable250) enable250.checked = true;
+                    if (enable750) enable750.checked = true;
+                    if (enable6500) enable6500.checked = true;
+                    if (enable8760) enable8760.checked = true;
+                    if (enable20000) enable20000.checked = true;
+                    if (enable40000) enable40000.checked = true;
+                }
+                
+                // Update all service cards
+                ['initial', 'daily', '250', '750', '6500', '8760', '20000', '40000'].forEach(id => {
+                    toggleService(id);
+                });
+                
+                calculatePlan();
+            }
+        }
+        
+        function resetDefaults() {
+            loadPreset('oem');
+        }
+        
+        function compareScenarios() {
+            alert('Scenario comparison feature coming soon!');
+        }
+        
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+            
+            // Service toggle listeners
+            ['initial', 'daily', '250', '750', '6500', '8760', '20000', '40000'].forEach(id => {
+                const checkbox = document.getElementById(`enable-${id}`);
+                if (checkbox) {
+                    checkbox.addEventListener('change', function() {
+                        toggleService(id);
+                        calculatePlan();
+                    });
+                }
+            });
+            
+            // Preset buttons
+            document.getElementById('preset-oem').addEventListener('click', function() {
+                document.querySelectorAll('.scenario-btn').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                loadPreset('oem');
+            });
+            
+            document.getElementById('preset-optimized').addEventListener('click', function() {
+                document.querySelectorAll('.scenario-btn').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                loadPreset('optimized');
+            });
+            
+            document.getElementById('preset-aggressive').addEventListener('click', function() {
+                document.querySelectorAll('.scenario-btn').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                loadPreset('aggressive');
+            });
+            
+            document.getElementById('preset-minimal').addEventListener('click', function() {
+                document.querySelectorAll('.scenario-btn').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                loadPreset('minimal');
+            });
+            
+            // Input change listeners
+            document.querySelectorAll('input[type="number"]').forEach(input => {
+                input.addEventListener('change', calculatePlan);
+            });
+            
+            // Initial calculation
+            calculatePlan();
+        });
+    </script>
+</body>
+</html>
