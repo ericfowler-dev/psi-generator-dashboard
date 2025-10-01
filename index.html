@@ -33,844 +33,618 @@
         }
         
         .control-panel {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
-        }
-        
-        .control-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-        
-        .service-grid {
-            display: grid;
-            /* Use a slightly smaller min-width for more flexibility */
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-        
-        .service-card {
-            background: white;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
             border-radius: 12px;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            transition: all 0.3s ease;
-        }
-        
-        .service-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .service-card.disabled {
-            opacity: 0.5;
-            background: #f5f5f5;
-        }
-        
-        .service-card.optimized {
-            border-color: #28a745;
-            background: linear-gradient(to bottom, #ffffff, #f0fff4);
-        }
-        
-        .service-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e0e0e0;
-        }
-        
-        .service-title {
-            font-weight: 600;
-            color: #333;
-            font-size: 1em;
-        }
-        
-        .switch-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .switch {
-            position: relative;
-            width: 48px;
-            height: 24px;
-        }
-        
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 24px;
-        }
-        
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-        
-        input:checked + .slider {
-            background-color: #667eea;
-        }
-        
-        input:checked + .slider:before {
-            transform: translateX(24px);
-        }
-        
-        .service-inputs {
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             display: grid;
-            /* FIX: Changed to 1fr grid to force vertical stacking by default for better control and clean layout */
-            grid-template-columns: 1fr; 
-            gap: 10px;
-            margin-bottom: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
         }
         
-        .input-group {
+        .control-group {
             display: flex;
             flex-direction: column;
         }
         
-        .input-group label {
-            font-size: 0.85em;
-            color: #555;
+        .control-panel label {
+            color: white;
+            font-weight: bold;
             margin-bottom: 5px;
-            font-weight: 500;
+            font-size: 0.9em;
         }
         
-        .input-group input, .input-group select {
-            padding: 8px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-        
-        .input-group input:focus, .input-group select:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        
-        .input-group input:disabled {
-            background: #f0f0f0;
-            cursor: not-allowed;
-        }
-        
-        .input-group small {
-            margin-top: 5px;
-            color: #888;
-            font-size: 0.75em;
-        }
-        
-        .service-stats {
+        .control-panel input[type="number"] {
             padding: 10px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            font-size: 0.85em;
-        }
-        
-        .stat-item {
-            display: flex;
-            justify-content: space-between;
-            margin: 5px 0;
-        }
-        
-        .stat-label {
-            color: #666;
-        }
-        
-        .stat-value {
-            font-weight: 600;
-            color: #333;
-        }
-        
-        h2 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 1.5em;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e0e0e0;
-        }
-        
-        h3 {
-            color: #555;
-            margin: 20px 0 15px 0;
-            font-size: 1.2em;
-        }
-        
-        .btn-container {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .btn {
-            flex: 1;
-            min-width: 150px;
-            padding: 12px 24px;
             border: none;
             border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 1em;
+        }
+
+        .metric-cards {
+            /* Updated to fit 4 cards across */
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
         }
         
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .metric-card h3 {
+            color: #764ba2;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .metric-card p.value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        /* The detail text is removed from HTML, but keeping this style for consistency */
+        .metric-card p.detail {
+            font-size: 0.9em;
+            color: #555;
+            min-height: 1.2em; /* Ensure cards don't jump when the detail text is empty */
+        }
+        
+        .content-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .card.scenario-control {
+            background: rgba(255, 255, 255, 0.1);
             color: white;
         }
         
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-        
-        .btn-secondary {
-            background: #6c757d;
+        .scenario-control h3 {
             color: white;
-        }
-        
-        .btn-secondary:hover {
-            background: #5a6268;
-        }
-        
-        .btn-success {
-            background: #28a745;
-            color: white;
-        }
-        
-        .btn-success:hover {
-            background: #218838;
+            margin-bottom: 15px;
+            text-align: center;
         }
         
         .scenario-buttons {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
+            justify-content: center;
         }
-        
+
         .scenario-btn {
-            flex: 1;
-            min-width: 120px;
-            padding: 10px;
-            background: #f8f9fa;
-            border: 2px solid #dee2e6;
+            padding: 10px 15px;
+            border: 2px solid white;
             border-radius: 8px;
+            background: transparent;
+            color: white;
             cursor: pointer;
+            font-weight: bold;
             transition: all 0.3s ease;
-            text-align: center;
         }
-        
+
         .scenario-btn:hover {
-            background: #e9ecef;
-            border-color: #667eea;
+            background: rgba(255, 255, 255, 0.2);
         }
-        
+
         .scenario-btn.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: white;
+            color: #667eea;
             border-color: #667eea;
         }
-        
-        .scenario-title {
-            font-weight: 600;
-            font-size: 0.9em;
-            margin-bottom: 3px;
-        }
-        
-        .scenario-desc {
-            font-size: 0.75em;
-            opacity: 0.8;
-        }
-        
-        .metrics-grid {
+
+        .service-list {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
         }
-        
-        .metric-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            text-align: center;
-            transition: transform 0.3s ease;
-            position: relative;
-            overflow: hidden;
+
+        .service-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
-        
-        .metric-card:hover {
-            transform: translateY(-5px);
+
+        .service-card.disabled {
+            opacity: 0.5;
+            background: #f8f8f8;
         }
-        
-        .metric-card.primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+
+        .service-card h4 {
+            font-size: 1em;
+            margin-bottom: 10px;
+            color: #333;
         }
-        
-        .metric-card.success {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            color: white;
-        }
-        
-        .metric-card.warning {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-        }
-        
-        .metric-card.info {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-        }
-        
-        .metric-value {
-            font-size: 2.5em;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        
-        .metric-label {
-            font-size: 0.9em;
-            opacity: 0.9;
-        }
-        
-        .metric-detail {
-            font-size: 0.8em;
-            opacity: 0.8;
-            margin-top: 5px;
-        }
-        
-        .chart-container {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-        
-        .chart-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-        
-        @media (max-width: 1200px) {
-            .chart-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        canvas {
-            max-height: 400px;
-        }
-        
-        .table-container {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow-x: auto;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        th {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 12px;
-            text-align: left;
-            font-weight: 600;
-        }
-        
-        td {
-            padding: 10px 12px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        
-        tr:hover {
-            background: #f8f9fa;
-        }
-        
-        tr.disabled {
-            opacity: 0.4;
-            background: #f5f5f5;
-        }
-        
-        tr.total-row {
-            background: #e8f4f8;
-            font-weight: 600;
-        }
-        
-        .savings-alert {
-            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-            border-left: 5px solid #28a745;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 30px;
-            display: none;
-        }
-        
-        .savings-alert.show {
-            display: block;
-        }
-        
-        .savings-value {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #155724;
+
+        .service-control {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 10px;
         }
         
-        .savings-details {
+        /* New style for the specific catalyst control */
+        .catalyst-control {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 5px 0;
+            border-top: 1px solid #eee;
+        }
+
+        .service-card .stats {
+            display: grid;
+            /* Changed to 3 columns to include parts cost */
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 5px;
+            margin-top: 10px;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+
+        .service-card .stat-item {
+            font-size: 0.8em;
+            text-align: center;
+        }
+
+        .service-card .stat-item strong {
+            display: block;
+            font-size: 1.1em;
+            color: #667eea;
+        }
+
+        .service-card input[type="number"] {
+            width: 70px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .service-card input[type="checkbox"] {
+            transform: scale(1.2);
+            accent-color: #667eea;
+        }
+
+        .chart-container {
+            height: 300px;
+            margin: 0 auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .total-row {
+            background-color: #e6e6ff !important;
+            font-weight: bold;
+            color: #667eea;
+            border-top: 2px solid #667eea;
+        }
+
+        .table-card tr.disabled {
+            background-color: #eee !important;
+            color: #999;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-align: center;
+            display: none;
+        }
+
+        .alert.savings {
+            background-color: #d4edda;
             color: #155724;
-            opacity: 0.9;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert.savings.show {
+            display: block;
+        }
+        
+        .total-cost-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #e53935; /* Red color for cost */
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🔧 PSI 53L Generator Service Planning Dashboard</h1>
-        
-        <div class="control-panel">
-            <h2>Configuration Parameters</h2>
-            
-            <h3>Fleet Configuration</h3>
-            <div class="control-grid">
-                <div class="input-group">
-                    <label>Total Fleet Size</label>
-                    <input type="number" id="totalUnits" value="1000" min="1">
-                    <small>Target number of units</small>
-                </div>
-                <div class="input-group">
-                    <label>Units per Month</label>
-                    <input type="number" id="unitsPerMonth" value="50" min="1">
-                    <small>Commissioning rate</small>
-                </div>
-                <div class="input-group">
-                    <label>Annual Runtime (hrs)</label>
-                    <input type="number" id="annualRuntime" value="6500" min="1">
-                    <small>Hours per year per unit</small>
-                </div>
-                <div class="input-group">
-                    <label>Working Days/Year</label>
-                    <input type="number" id="workingDays" value="250" min="200" max="365">
-                    <small>Excluding weekends/holidays</small>
-                </div>
-                <div class="input-group">
-                    <label>Hours per Day</label>
-                    <input type="number" id="hoursPerDay" value="8" min="1" max="24">
-                    <small>Standard shift</small>
-                </div>
-                <div class="input-group">
-                    <label>Target Utilization (%)</label>
-                    <input type="number" id="targetUtilization" value="75" min="50" max="95">
-                    <small>Productive time</small>
-                </div>
-            </div>
-            
-            <h3>Service Interval Presets</h3>
+        <h1>PSI Generator Service Planning Dashboard 📊</h1>
+
+        <div class="card scenario-control">
+            <h3>Load Preset Scenario</h3>
             <div class="scenario-buttons">
-                <div class="scenario-btn active" id="preset-oem">
-                    <div class="scenario-title">OEM Baseline</div>
-                    <div class="scenario-desc">Standard intervals</div>
-                </div>
-                <div class="scenario-btn" id="preset-optimized">
-                    <div class="scenario-title">Optimized</div>
-                    <div class="scenario-desc">+30% extension</div>
-                </div>
-                <div class="scenario-btn" id="preset-aggressive">
-                    <div class="scenario-title">Aggressive</div>
-                    <div class="scenario-desc">Maximum extension</div>
-                </div>
-                <div class="scenario-btn" id="preset-minimal">
-                    <div class="scenario-title">Minimal</div>
-                    <div class="scenario-desc">Essential only</div>
-                </div>
+                <button class="scenario-btn active" id="preset-oem">OEM Intervals</button>
+                <button class="scenario-btn" id="preset-optimized">Optimized</button>
+                <button class="scenario-btn" id="preset-aggressive">Aggressive</button>
+                <button class="scenario-btn" id="preset-minimal">Minimal Service</button>
             </div>
-            
-            <h3>Service Intervals - Full Control</h3>
-            <div class="service-grid">
+        </div>
+
+        <div class="control-panel">
+            <div class="control-group">
+                <label for="totalUnits">Total Units in Fleet</label>
+                <input type="number" id="totalUnits" value="750" min="1" onchange="calculatePlan()">
+            </div>
+            <div class="control-group">
+                <label for="unitsPerMonth">Units Added/Month</label>
+                <input type="number" id="unitsPerMonth" value="50" min="1" onchange="calculatePlan()">
+            </div>
+            <div class="control-group">
+                <label for="annualRuntime">Annual Runtime (Hours/Unit)</label>
+                <input type="number" id="annualRuntime" value="6500" min="100" onchange="calculatePlan()">
+            </div>
+            <div class="control-group">
+                <label for="workingDays">Working Days/Year</label>
+                <input type="number" id="workingDays" value="300" min="1" onchange="calculatePlan()">
+            </div>
+            <div class="control-group">
+                <label for="hoursPerDay">Hours/Day</label>
+                <input type="number" id="hoursPerDay" value="10" min="1" onchange="calculatePlan()">
+            </div>
+            <div class="control-group">
+                <label for="targetUtilization">Target Tech Utilization (%)</label>
+                <input type="number" id="targetUtilization" value="85" min="1" max="100" onchange="calculatePlan()">
+            </div>
+        </div>
+        
+        <div class="alert savings" id="savingsAlert">
+            Significant projected annual savings of <span id="savingsAmount"></span>! Details: <span id="savingsDetails"></span>.
+        </div>
+        <div class="metric-cards">
+            <div class="metric-card">
+                <h3>Required Technicians</h3>
+                <p class="value" id="techsRequired">0</p>
+                <p class="detail" id="techDetail"></p> 
+            </div>
+            <div class="metric-card">
+                <h3>Annual Services</h3>
+                <p class="value" id="annualServices">0</p>
+                <p class="detail"></p> 
+            </div>
+            <div class="metric-card">
+                <h3>Total Annual Labor Hours</h3>
+                <p class="value" id="totalHours">0</p>
+                <p class="detail" id="hoursDetail"></p> 
+            </div>
+            <div class="metric-card">
+                <h3>Total Annual O&M Cost</h3>
+                <p class="total-cost-value" id="totalCost">$0M</p>
+                <p class="detail" id="costDetail"></p> 
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>Service Plan Customization & Labor</h2>
+            <div class="service-list">
+                
                 <div class="service-card" id="card-initial">
-                    <div class="service-header">
-                        <span class="service-title">Initial 50 Hour</span>
-                        <div class="switch-container">
-                            <span style="font-size: 0.8em;">Enable</span>
-                            <label class="switch">
-                                <input type="checkbox" id="enable-initial" checked>
-                                <span class="slider"></span>
-                            </label>
-                        </div>
+                    <h4>Initial 50 Hour Service</h4>
+                    <div class="service-control">
+                        <label for="enable-initial">Enable</label>
+                        <input type="checkbox" id="enable-initial" checked onchange="toggleService('initial')">
                     </div>
-                    <div class="service-inputs">
-                        <div class="input-group">
-                            <label>Interval (hrs)</label>
-                            <input type="number" id="interval-initial" value="50" disabled>
-                        </div>
-                        <div class="input-group">
-                            <label>Labor (hrs)</label>
-                            <input type="number" id="hours-initial" value="17.2" step="0.1">
-                        </div>
+                    <div class="service-control">
+                        <label for="hours-initial">Labor (hrs)</label>
+                        <input type="number" id="hours-initial" value="9.9" step="0.1" min="0" onchange="calculatePlan()">
                     </div>
-                    <div class="service-stats">
-                        <div class="stat-item">
-                            <span class="stat-label">Type:</span>
-                            <span class="stat-value">One-time</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Total Services:</span>
-                            <span class="stat-value" id="stat-initial">1,000</span>
-                        </div>
+                    <div class="service-control">
+                        <label for="parts-initial">Parts Cost/Service ($)</label>
+                        <input type="number" id="parts-initial" value="318" step="1" min="0" onchange="calculatePlan()">
+                    </div>
+                    <div class="stats">
+                        <div class="stat-item">Services/Yr: <strong id="stat-initial">0</strong></div>
+                        <div class="stat-item">Labor/Yr (Hrs): <strong id="stat-initial-hours">0</strong></div>
+                        <div class="stat-item">Parts/Yr ($): <strong id="stat-initial-parts">0</strong></div>
                     </div>
                 </div>
-                
-                <div class="service-card disabled" id="card-daily">
-                    <div class="service-header">
-                        <span class="service-title">Daily Checks</span>
-                        <div class="switch-container">
-                            <span style="font-size: 0.8em;">Enable</span>
-                            <label class="switch">
-                                <input type="checkbox" id="enable-daily">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
+
+                <div class="service-card" id="card-daily">
+                    <h4>Daily Checks (24 Hours)</h4>
+                    <div class="service-control">
+                        <label>Automated</label>
+                        <span style="color: green; font-weight: bold;">YES</span>
                     </div>
-                    <div class="service-inputs">
-                        <div class="input-group">
-                            <label>Interval (hrs)</label>
-                            <input type="number" id="interval-daily" value="24" disabled>
-                        </div>
-                        <div class="input-group">
-                            <label>Labor (hrs)</label>
-                            <input type="number" id="hours-daily" value="0.9" disabled>
-                        </div>
+                    <div class="service-control">
+                        <label for="hours-daily">Labor (hrs)</label>
+                        <input type="number" id="hours-daily" value="0" step="0.1" disabled>
                     </div>
-                    <div class="service-stats">
-                        <div class="stat-item">
-                            <span class="stat-label">Status:</span>
-                            <span class="stat-value" style="color: #28a745;">AUTOMATED</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Method:</span>
-                            <span class="stat-value">Sensors</span>
-                        </div>
+                    <div class="stats">
+                        <div class="stat-item">Services/Yr: <strong id="stat-daily">0</strong></div>
+                        <div class="stat-item">Labor/Yr (Hrs): <strong id="stat-daily-hours">0</strong></div>
+                        <div class="stat-item">Parts/Yr ($): <strong id="stat-daily-parts">0</strong></div>
                     </div>
                 </div>
                 
                 <div class="service-card" id="card-250">
-                    <div class="service-header">
-                        <span class="service-title">250 Hour Service</span>
-                        <div class="switch-container">
-                            <span style="font-size: 0.8em;">Enable</span>
-                            <label class="switch">
-                                <input type="checkbox" id="enable-250" checked>
-                                <span class="slider"></span>
-                            </label>
-                        </div>
+                    <h4>250 Hour Service</h4>
+                    <div class="service-control">
+                        <label for="enable-250">Enable</label>
+                        <input type="checkbox" id="enable-250" onchange="toggleService('250')"> 
                     </div>
-                    <div class="service-inputs">
-                        <div class="input-group">
-                            <label>Interval (hrs)</label>
-                            <input type="number" id="interval-250" value="250" min="100" max="500" step="50">
-                        </div>
-                        <div class="input-group">
-                            <label>Labor (hrs)</label>
-                            <input type="number" id="hours-250" value="0.9" step="0.1">
-                        </div>
+                    <div class="service-control">
+                        <label for="interval-250">Interval (Hrs)</label>
+                        <input type="number" id="interval-250" value="325" step="1" min="1">
                     </div>
-                    <div class="service-stats">
-                        <div class="stat-item">
-                            <span class="stat-label">Services/Year:</span>
-                            <span class="stat-value" id="stat-250">26,000</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Total Hours:</span>
-                            <span class="stat-value" id="stat-250-hours">23,400</span>
-                        </div>
+                    <div class="service-control">
+                        <label for="hours-250">Labor (hrs)</label>
+                        <input type="number" id="hours-250" value="0.55" step="0.05" min="0">
+                    </div>
+                    <div class="service-control">
+                        <label for="parts-250">Parts Cost/Service ($)</label>
+                        <input type="number" id="parts-250" value="0" step="1" min="0" onchange="calculatePlan()">
+                    </div>
+                    <div class="stats">
+                        <div class="stat-item">Services/Yr: <strong id="stat-250">0</strong></div>
+                        <div class="stat-item">Labor/Yr (Hrs): <strong id="stat-250-hours">0</strong></div>
+                        <div class="stat-item">Parts/Yr ($): <strong id="stat-250-parts">0</strong></div>
                     </div>
                 </div>
                 
                 <div class="service-card" id="card-750">
-                    <div class="service-header">
-                        <span class="service-title">750 Hour Service</span>
-                        <div class="switch-container">
-                            <span style="font-size: 0.8em;">Enable</span>
-                            <label class="switch">
-                                <input type="checkbox" id="enable-750" checked>
-                                <span class="slider"></span>
-                            </label>
-                        </div>
+                    <h4>750 Hour Service</h4>
+                    <div class="service-control">
+                        <label for="enable-750">Enable</label>
+                        <input type="checkbox" id="enable-750" checked onchange="toggleService('750')">
                     </div>
-                    <div class="service-inputs">
-                        <div class="input-group">
-                            <label>Interval (hrs)</label>
-                            <input type="number" id="interval-750" value="750" min="500" max="1500" step="50">
-                        </div>
-                        <div class="input-group">
-                            <label>Labor (hrs)</label>
-                            <input type="number" id="hours-750" value="14.7" step="0.1">
-                        </div>
+                    <div class="service-control">
+                        <label for="interval-750">Interval (Hrs)</label>
+                        <input type="number" id="interval-750" value="975" step="10" min="1">
                     </div>
-                    <div class="service-stats">
-                        <div class="stat-item">
-                            <span class="stat-label">Services/Year:</span>
-                            <span class="stat-value" id="stat-750">8,667</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Total Hours:</span>
-                            <span class="stat-value" id="stat-750-hours">127,405</span>
-                        </div>
+                    <div class="service-control">
+                        <label for="hours-750">Labor (hrs)</label>
+                        <input type="number" id="hours-750" value="8.05" step="0.05" min="0">
+                    </div>
+                    <div class="service-control">
+                        <label for="parts-750">Parts Cost/Service ($)</label>
+                        <input type="number" id="parts-750" value="1328" step="1" min="0" onchange="calculatePlan()">
+                    </div>
+                    <div class="stats">
+                        <div class="stat-item">Services/Yr: <strong id="stat-750">0</strong></div>
+                        <div class="stat-item">Labor/Yr (Hrs): <strong id="stat-750-hours">0</strong></div>
+                        <div class="stat-item">Parts/Yr ($): <strong id="stat-750-parts">0</strong></div>
                     </div>
                 </div>
-                
+
                 <div class="service-card" id="card-6500">
-                    <div class="service-header">
-                        <span class="service-title">6500 Hour Service</span>
-                        <div class="switch-container">
-                            <span style="font-size: 0.8em;">Enable</span>
-                            <label class="switch">
-                                <input type="checkbox" id="enable-6500" checked>
-                                <span class="slider"></span>
-                            </label>
-                        </div>
+                    <h4>6500 Hour Service</h4>
+                    <div class="service-control">
+                        <label for="enable-6500">Enable</label>
+                        <input type="checkbox" id="enable-6500" checked onchange="toggleService('6500')">
                     </div>
-                    <div class="service-inputs">
-                        <div class="input-group">
-                            <label>Interval (hrs)</label>
-                            <input type="number" id="interval-6500" value="6500" min="5000" max="12000" step="500">
-                        </div>
-                        <div class="input-group">
-                            <label>Labor (hrs)</label>
-                            <input type="number" id="hours-6500" value="20" step="0.5">
-                        </div>
+                    <div class="service-control">
+                        <label for="interval-6500">Interval (Hrs)</label>
+                        <input type="number" id="interval-6500" value="8450" step="100" min="100">
                     </div>
-                    <div class="service-stats">
-                        <div class="stat-item">
-                            <span class="stat-label">Services/Year:</span>
-                            <span class="stat-value" id="stat-6500">1,000</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Total Hours:</span>
-                            <span class="stat-value" id="stat-6500-hours">20,000</span>
-                        </div>
+                    <div class="service-control">
+                        <label for="hours-6500">Labor (hrs)</label>
+                        <input type="number" id="hours-6500" value="22.5" step="0.5" min="0">
+                    </div>
+                    <div class="service-control">
+                        <label for="parts-6500">Parts Cost/Service ($)</label>
+                        <input type="number" id="parts-6500" value="13251" step="1" min="0" onchange="calculatePlan()">
+                    </div>
+                    <div class="stats">
+                        <div class="stat-item">Services/Yr: <strong id="stat-6500">0</strong></div>
+                        <div class="stat-item">Labor/Yr (Hrs): <strong id="stat-6500-hours">0</strong></div>
+                        <div class="stat-item">Parts/Yr ($): <strong id="stat-6500-parts">0</strong></div>
                     </div>
                 </div>
-                
+
                 <div class="service-card" id="card-8760">
-                    <div class="service-header">
-                        <span class="service-title">8760 Hour (Annual)</span>
-                        <div class="switch-container">
-                            <span style="font-size: 0.8em;">Enable</span>
-                            <label class="switch">
-                                <input type="checkbox" id="enable-8760" checked>
-                                <span class="slider"></span>
-                            </label>
-                        </div>
+                    <h4>Annual 8760 Hour Service</h4>
+                    <div class="service-control">
+                        <label for="enable-8760">Enable</label>
+                        <input type="checkbox" id="enable-8760" checked onchange="toggleService('8760')">
                     </div>
-                    <div class="service-inputs">
-                        <div class="input-group">
-                            <label>Interval (hrs)</label>
-                            <input type="number" id="interval-8760" value="8760" disabled>
-                        </div>
-                        <div class="input-group">
-                            <label>Labor (hrs)</label>
-                            <input type="number" id="hours-8760" value="10.7" step="0.1">
-                        </div>
+                    <div class="service-control">
+                        <label for="interval-8760">Interval (Hrs)</label>
+                        <input type="number" id="interval-8760" value="8760" step="1" min="1" disabled>
                     </div>
-                    <div class="service-stats">
-                        <div class="stat-item">
-                            <span class="stat-label">Services/Year:</span>
-                            <span class="stat-value" id="stat-8760">743</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Total Hours:</span>
-                            <span class="stat-value" id="stat-8760-hours">7,950</span>
-                        </div>
+                    <div class="service-control">
+                        <label for="hours-8760">Labor (hrs)</label>
+                        <input type="number" id="hours-8760" value="10.0" step="0.1" min="0">
+                    </div>
+                    <div class="catalyst-control">
+                        <label for="catalyst-8760">Catalyst Not Required</label>
+                        <input type="checkbox" id="catalyst-8760" onchange="toggleCatalyst()">
+                    </div>
+                    <div class="service-control">
+                        <label for="parts-8760">Parts Cost/Service ($)</label>
+                        <input type="number" id="parts-8760" value="21908" step="1" min="0" onchange="calculatePlan()">
+                    </div>
+                    <div class="stats">
+                        <div class="stat-item">Services/Yr: <strong id="stat-8760">0</strong></div>
+                        <div class="stat-item">Labor/Yr (Hrs): <strong id="stat-8760-hours">0</strong></div>
+                        <div class="stat-item">Parts/Yr ($): <strong id="stat-8760-parts">0</strong></div>
                     </div>
                 </div>
-                
+
                 <div class="service-card" id="card-20000">
-                    <div class="service-header">
-                        <span class="service-title">20,000 Hour Top End</span>
-                        <div class="switch-container">
-                            <span style="font-size: 0.8em;">Enable</span>
-                            <label class="switch">
-                                <input type="checkbox" id="enable-20000" checked>
-                                <span class="slider"></span>
-                            </label>
-                        </div>
+                    <h4>20,000 Hour Top End</h4>
+                    <div class="service-control">
+                        <label for="enable-20000">Enable</label>
+                        <input type="checkbox" id="enable-20000" onchange="toggleService('20000')">
                     </div>
-                    <div class="service-inputs">
-                        <div class="input-group">
-                            <label>Interval (hrs)</label>
-                            <input type="number" id="interval-20000" value="20000" min="15000" max="30000" step="1000">
-                        </div>
-                        <div class="input-group">
-                            <label>Labor (hrs)</label>
-                            <input type="number" id="hours-20000" value="82.7" step="1">
-                        </div>
+                    <div class="service-control">
+                        <label for="interval-20000">Interval (Hrs)</label>
+                        <input type="number" id="interval-20000" value="26000" step="1000" min="1000">
                     </div>
-                    <div class="service-stats">
-                        <div class="stat-item">
-                            <span class="stat-label">Services/Year:</span>
-                            <span class="stat-value" id="stat-20000">325</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Total Hours:</span>
-                            <span class="stat-value" id="stat-20000-hours">26,878</span>
-                        </div>
+                    <div class="service-control">
+                        <label for="hours-20000">Labor (hrs)</label>
+                        <input type="number" id="hours-20000" value="67.45" step="0.05" min="0">
+                    </div>
+                    <div class="service-control">
+                        <label for="parts-20000">Parts Cost/Service ($)</label>
+                        <input type="number" id="parts-20000" value="51359" step="1" min="0" onchange="calculatePlan()">
+                    </div>
+                    <div class="stats">
+                        <div class="stat-item">Services/Yr: <strong id="stat-20000">0</strong></div>
+                        <div class="stat-item">Labor/Yr (Hrs): <strong id="stat-20000-hours">0</strong></div>
+                        <div class="stat-item">Parts/Yr ($): <strong id="stat-20000-parts">0</strong></div>
                     </div>
                 </div>
                 
                 <div class="service-card" id="card-40000">
-                    <div class="service-header">
-                        <span class="service-title">40,000 Hour Overhaul</span>
-                        <div class="switch-container">
-                            <span style="font-size: 0.8em;">Enable</span>
-                            <label class="switch">
-                                <input type="checkbox" id="enable-40000" checked>
-                                <span class="slider"></span>
-                            </label>
-                        </div>
+                    <h4>40,000 Hour Overhaul</h4>
+                    <div class="service-control">
+                        <label for="enable-40000">Enable</label>
+                        <input type="checkbox" id="enable-40000" onchange="toggleService('40000')">
                     </div>
-                    <div class="service-inputs">
-                        <div class="input-group">
-                            <label>Interval (hrs)</label>
-                            <input type="number" id="interval-40000" value="40000" min="30000" max="60000" step="5000">
-                        </div>
-                        <div class="input-group">
-                            <label>Labor (hrs)</label>
-                            <input type="number" id="hours-40000" value="182" step="1">
-                        </div>
+                    <div class="service-control">
+                        <label for="interval-40000">Interval (Hrs)</label>
+                        <input type="number" id="interval-40000" value="52000" step="1000" min="1000">
                     </div>
-                    <div class="service-stats">
-                        <div class="stat-item">
-                            <span class="stat-label">Services/Year:</span>
-                            <span class="stat-value" id="stat-40000">163</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Total Hours:</span>
-                            <span class="stat-value" id="stat-40000-hours">29,666</span>
-                        </div>
+                    <div class="service-control">
+                        <label for="hours-40000">Labor (hrs)</label>
+                        <input type="number" id="hours-40000" value="131" step="1" min="0">
+                    </div>
+                    <div class="service-control">
+                        <label for="parts-40000">Parts Cost/Service ($)</label>
+                        <input type="number" id="parts-40000" value="116746" step="1" min="0" onchange="calculatePlan()">
+                    </div>
+                    <div class="stats">
+                        <div class="stat-item">Services/Yr: <strong id="stat-40000">0</strong></div>
+                        <div class="stat-item">Labor/Yr (Hrs): <strong id="stat-40000-hours">0</strong></div>
+                        <div class="stat-item">Parts/Yr ($): <strong id="stat-40000-parts">0</strong></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="content-layout">
+            <div class="card">
+                <h2>Annual Service Summary Table</h2>
+                <div class="table-card">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Service</th>
+                                <th>Status</th>
+                                <th>Interval (Hrs)</th>
+                                <th>Services/Year</th>
+                                <th>Labor/Service (Hrs)</th>
+                                <th>Total Labor (Hrs/Yr)</th>
+                                <th>Parts Cost/Service ($)</th> 
+                                <th>Total Parts Cost ($/Yr)</th> 
+                                <th>% of Total Labor</th>
+                            </tr>
+                        </thead>
+                        <tbody id="summaryTableBody">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div>
+                <div class="card">
+                    <h3>Service Distribution</h3>
+                    <div class="chart-container">
+                        <canvas id="serviceChart"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Annual Labor Hour Distribution</h3>
+                    <div class="chart-container">
+                        <canvas id="laborChart"></canvas>
                     </div>
                 </div>
             </div>
-            
-            <div class="btn-container">
-                <button class="btn btn-primary" onclick="calculatePlan()">Calculate Plan</button>
-                <button class="btn btn-secondary" onclick="resetDefaults()">Reset to OEM</button>
-                <button class="btn btn-success" onclick="compareScenarios()">Compare Scenarios</button>
+        </div>
+
+        <div class="card">
+            <h2>Staffing Ramp-up Projection</h2>
+            <div class="chart-container" style="height: 350px;">
+                <canvas id="staffingChart"></canvas>
             </div>
         </div>
-        
-        <div id="savingsAlert" class="savings-alert">
-            <div class="savings-value">💰 Total Savings: <span id="savingsAmount">$0M</span> Annually</div>
-            <div class="savings-details" id="savingsDetails"></div>
-        </div>
-        
-        <div class="metrics-grid">
-            <div class="metric-card primary">
-                <div class="metric-value" id="techsRequired">0</div>
-                <div class="metric-label">Technicians Required</div>
-                <div class="metric-detail" id="techDetail"></div>
-            </div>
-            <div class="metric-card success">
-                <div class="metric-value" id="annualServices">0</div>
-                <div class="metric-label">Annual Services</div>
-                <div class="metric-detail" id="serviceDetail"></div>
-            </div>
-            <div class="metric-card info">
-                <div class="metric-value" id="totalHours">0</div>
-                <div class="metric-label">Total Labor Hours</div>
-                <div class="metric-detail" id="hoursDetail"></div>
-            </div>
-            <div class="metric-card warning">
-                <div class="metric-value" id="totalCost">$0M</div>
-                <div class="metric-label">Annual O&M Cost</div>
-                <div class="metric-detail" id="costDetail"></div>
-            </div>
-        </div>
-        
-        <div class="chart-grid">
-            <div class="chart-container">
-                <h3>Service Distribution</h3>
-                <canvas id="serviceChart"></canvas>
-            </div>
-            <div class="chart-container">
-                <h3>Labor Hours by Service Type</h3>
-                <canvas id="laborChart"></canvas>
-            </div>
-        </div>
-        
-        <div class="chart-container">
-            <h3>Technician Requirements Over Time</h3>
-            <canvas id="staffingChart"></canvas>
-        </div>
-        
-        <div class="table-container">
-            <h3>Service Schedule Summary</h3>
-            <table id="summaryTable">
-                <thead>
-                    <tr>
-                        <th>Service Type</th>
-                        <th>Status</th>
-                        <th>Interval (hrs)</th>
-                        <th>Services/Year</th>
-                        <th>Labor hrs/Service</th>
-                        <th>Total Hours</th>
-                        <th>% of Workload</th>
-                    </tr>
-                </thead>
-                <tbody id="summaryTableBody">
-                </tbody>
-            </table>
-        </div>
+
     </div>
-    
+
     <script>
         let serviceChart, laborChart, staffingChart;
-        let baselineData = {
-            techs: 124,
-            services: 37357,
-            hours: 241749,
-            cost: 29400000
-        };
         
+        // --- CONFIGURATION ---
+        const LABOR_RATE_PER_HOUR = 65; // Example: $65/hr
+        const GENERAL_OVERHEAD_PERCENT = 0.15; // 15% Overhead on (Labor + Parts)
+        
+        // Cost constants for the 8760 service
+        const BASE_8760_PARTS_COST = 21908;
+        const CATALYST_COST = 17953; // Using 17953 for a clean $3755 result
+        const NO_CATALYST_PARTS_COST = BASE_8760_PARTS_COST - CATALYST_COST; // $21908 - $17953 = $3755
+        
+        // Baseline data based on OEM intervals and labor hours for comparison
+        let baselineData = {
+            techs: 99, 
+            services: 37579,
+            hours: 191822, 
+            cost: 23141000 
+        };
+        // --- END CONFIGURATION ---
+        
+        // Toggles the 8760 parts cost based on the catalyst checkbox
+        function toggleCatalyst() {
+            const partsInput = document.getElementById('parts-8760');
+            const catalystCheckbox = document.getElementById('catalyst-8760');
+            
+            if (catalystCheckbox.checked) {
+                partsInput.value = NO_CATALYST_PARTS_COST;
+            } else {
+                partsInput.value = BASE_8760_PARTS_COST;
+            }
+            // Recalculate the plan immediately after changing the parts cost
+            calculatePlan();
+        }
+
         // Initialize charts
         function initCharts() {
             // Service distribution chart
@@ -950,6 +724,8 @@
             const card = document.getElementById(`card-${serviceId}`);
             const intervalInput = document.getElementById(`interval-${serviceId}`);
             const hoursInput = document.getElementById(`hours-${serviceId}`);
+            const partsInput = document.getElementById(`parts-${serviceId}`); 
+            const catalystCheckbox = document.getElementById(`catalyst-${serviceId}`); // Specific to 8760
             
             if (checkbox) {
                 if (checkbox.checked) {
@@ -960,10 +736,20 @@
                     if (serviceId !== 'daily' && hoursInput) {
                         hoursInput.disabled = false;
                     }
+                    if (serviceId !== 'daily' && partsInput) { 
+                        partsInput.disabled = false;
+                    }
+                    if (catalystCheckbox) {
+                        catalystCheckbox.disabled = false;
+                    }
                 } else {
                     card.classList.add('disabled');
                     if (intervalInput) intervalInput.disabled = true;
                     if (hoursInput) hoursInput.disabled = true;
+                    if (partsInput) partsInput.disabled = true; 
+                    if (catalystCheckbox) {
+                        catalystCheckbox.disabled = true;
+                    }
                 }
             }
         }
@@ -979,96 +765,153 @@
             
             let totalServices = 0;
             let totalLaborHours = 0;
+            let totalPartsCost = 0; 
             const serviceData = [];
             const laborData = [];
             
             // Calculate for each service interval
             const services = [
                 {id: 'initial', name: 'Initial 50hr', oneTime: true},
-                {id: 'daily', name: 'Daily Checks', automated: true},
+                {id: 'daily', name: 'Daily Checks', automated: true, interval: 24},
                 {id: '250', name: '250 Hour'},
                 {id: '750', name: '750 Hour'},
                 {id: '6500', name: '6500 Hour'},
-                {id: '8760', name: 'Annual'},
+                {id: '8760', name: 'Annual', interval: 8760},
                 {id: '20000', name: 'Top End'},
                 {id: '40000', name: 'Overhaul'}
             ];
             
             let tableHTML = '';
+
+            // Calculate total labor hours for percentage calculation first
+            const totalLaborForPercentage = services.reduce((acc, curr) => {
+                const hrs = document.getElementById(`hours-${curr.id}`) ? parseFloat(document.getElementById(`hours-${curr.id}`).value) : 0;
+                let interval;
+                if (curr.automated || curr.oneTime || curr.id === '8760') {
+                    interval = curr.interval || (curr.id === '8760' ? 8760 : 0);
+                } else {
+                    interval = document.getElementById(`interval-${curr.id}`) ? parseInt(document.getElementById(`interval-${curr.id}`).value) : 0;
+                }
+                const enabled = document.getElementById(`enable-${curr.id}`) ? document.getElementById(`enable-${curr.id}`).checked : false;
+
+                if (enabled && !curr.automated) {
+                    if (curr.oneTime) {
+                        return acc + (totalUnits * hrs) / 3;
+                    } else if (curr.id === '8760') {
+                        return acc + (totalUnits * hrs);
+                    } else if (interval > 0) {
+                        return acc + (totalUnits * annualRuntime / interval) * hrs;
+                    }
+                }
+                return acc;
+            }, 0);
+            
             
             services.forEach(service => {
                 const enabled = document.getElementById(`enable-${service.id}`) ? document.getElementById(`enable-${service.id}`).checked : false;
                 
                 let servicesPerYear = 0;
                 let hoursPerYear = 0;
-                let interval = document.getElementById(`interval-${service.id}`) ? parseInt(document.getElementById(`interval-${service.id}`).value) : 0;
+                let partsPerYear = 0; 
+                let interval;
+
+                if (service.automated || service.oneTime || service.id === '8760') {
+                    interval = service.interval || (service.id === '8760' ? 8760 : 0);
+                } else {
+                    interval = document.getElementById(`interval-${service.id}`) ? parseInt(document.getElementById(`interval-${service.id}`).value) : 0;
+                }
+                
                 let laborHours = document.getElementById(`hours-${service.id}`) ? parseFloat(document.getElementById(`hours-${service.id}`).value) : 0;
+                
+                const partsInputElement = document.getElementById(`parts-${service.id}`);
+                // Use Math.round() when reading the value to ensure integer arithmetic
+                let partsCostPerService = partsInputElement ? Math.round(parseFloat(partsInputElement.value)) : 0;
                 
                 // --- CALCULATION LOGIC ---
                 if (service.automated) {
-                    // Daily checks are always considered automated and have 0 labor hours
-                    servicesPerYear = Math.round(totalUnits * annualRuntime / (interval || 24)); // Services still calculated for reference
-                    hoursPerYear = 0; // Labor hours are 0 for automated
+                    servicesPerYear = Math.round(totalUnits * annualRuntime / (interval || 24)); 
+                    hoursPerYear = 0; 
+                    partsPerYear = 0;
                 } else if (enabled) {
                     
                     if (service.oneTime) {
+                        servicesPerYear = totalUnits; 
+                        hoursPerYear = (totalUnits * laborHours) / 3; 
+                        partsPerYear = (totalUnits * partsCostPerService) / 3; 
+                        totalPartsCost += partsPerYear; 
+                    } else if (service.id === '8760') {
                         servicesPerYear = totalUnits;
-                        hoursPerYear = (totalUnits * laborHours) / 3; // Spread over 3 years for annual hours
-                    } else {
-                        // Regular recurring service
+                        hoursPerYear = totalUnits * laborHours;
+                        partsPerYear = totalUnits * partsCostPerService; 
+                        totalPartsCost += partsPerYear;
+                    } 
+                    else if (interval > 0) {
                         servicesPerYear = Math.round(totalUnits * annualRuntime / interval);
                         hoursPerYear = servicesPerYear * laborHours;
+                        partsPerYear = servicesPerYear * partsCostPerService; 
+                        totalPartsCost += partsPerYear; 
                     }
                     
-                    totalServices += servicesPerYear;
-                    totalLaborHours += hoursPerYear;
+                    if (!service.oneTime && !service.automated) {
+                       totalServices += servicesPerYear;
+                    }
                     
-                    serviceData.push({name: service.name, value: servicesPerYear});
-                    laborData.push({name: service.name, value: hoursPerYear});
+                    if (!service.automated) {
+                        totalLaborHours += hoursPerYear;
+                        serviceData.push({name: service.name, value: service.oneTime ? servicesPerYear / 3 : servicesPerYear});
+                        laborData.push({name: service.name, value: hoursPerYear});
+                    }
                 }
                 // --- END CALCULATION LOGIC ---
                 
                 
-                // --- UPDATE STATS ---
-                
-                // Update stats in the card
+                // --- UPDATE STATS (SERVICE CARDS) ---
+                const displayServicesPerYear = service.oneTime ? totalUnits : servicesPerYear;
+
                 const statElement = document.getElementById(`stat-${service.id}`);
                 if (statElement) {
-                    statElement.textContent = servicesPerYear.toLocaleString();
+                    statElement.textContent = displayServicesPerYear.toLocaleString();
                 }
                 const hoursElement = document.getElementById(`stat-${service.id}-hours`);
                 if (hoursElement) {
                     hoursElement.textContent = Math.round(hoursPerYear).toLocaleString();
                 }
+                const partsStatElement = document.getElementById(`stat-${service.id}-parts`); 
+                if (partsStatElement) {
+                    partsStatElement.textContent = Math.round(partsPerYear).toLocaleString();
+                }
 
                 
                 // --- UPDATE TABLE HTML ---
-
                 if (service.automated) {
-                    // Daily checks always appear as a disabled/automated row but don't add to totals
                     tableHTML += `
                         <tr class="disabled">
                             <td>${service.name}</td>
                             <td>🤖 Automated</td>
                             <td>${interval || 24}</td>
                             <td>${servicesPerYear.toLocaleString()}</td>
-                            <td>${laborHours}</td>
+                            <td>${laborHours.toFixed(2)}</td>
                             <td>0</td>
-                            <td>0%</td>
+                            <td>$0</td>
+                            <td>$0</td>
+                            <td>0.0%</td>
                         </tr>
                     `;
                 } else if (enabled) {
-                    // Ensure totalLaborHours is not zero before division
-                    const percentage = totalLaborHours > 0 ? (hoursPerYear / totalLaborHours * 100).toFixed(1) : '0.0';
+                    const percentage = totalLaborForPercentage > 0 ? (hoursPerYear / totalLaborForPercentage * 100).toFixed(1) : '0.0';
+                    const intervalDisplay = service.oneTime ? 'Once/Unit (Spread 3Y)' : (service.id === '8760' ? 'Annual (8760)' : interval.toLocaleString());
+                    const servicesPerYearDisplay = service.oneTime ? totalUnits : servicesPerYear; 
                     
                     tableHTML += `
                         <tr>
                             <td>${service.name}</td>
                             <td>✅ Active</td>
-                            <td>${interval.toLocaleString()}</td>
-                            <td>${servicesPerYear.toLocaleString()}</td>
-                            <td>${laborHours}</td>
+                            <td>${intervalDisplay}</td>
+                            <td>${servicesPerYearDisplay.toLocaleString()}</td>
+                            <td>${laborHours.toFixed(2)}</td>
                             <td>${Math.round(hoursPerYear).toLocaleString()}</td>
+                            <td>$${partsCostPerService.toLocaleString()}</td> 
+                            <td>$${Math.round(partsPerYear).toLocaleString()}</td> 
                             <td>${percentage}%</td>
                         </tr>
                     `;
@@ -1077,6 +920,8 @@
                         <tr class="disabled">
                             <td>${service.name}</td>
                             <td>❌ Disabled</td>
+                            <td>-</td>
+                            <td>-</td>
                             <td>-</td>
                             <td>-</td>
                             <td>-</td>
@@ -1096,6 +941,8 @@
                     <td><strong>${totalServices.toLocaleString()}</strong></td>
                     <td><strong>-</strong></td>
                     <td><strong>${Math.round(totalLaborHours).toLocaleString()}</strong></td>
+                    <td><strong>-</strong></td>
+                    <td><strong>$${Math.round(totalPartsCost).toLocaleString()}</strong></td>
                     <td><strong>100%</strong></td>
                 </tr>
             `;
@@ -1107,35 +954,40 @@
             const techsRequired = Math.ceil(totalLaborHours / availableHours * 1.15); // 15% contingency
             
             // Calculate costs
-            const laborCost = totalLaborHours * 120;
-            const partsCost = laborCost * 0.35;
-            const totalOMCost = laborCost + partsCost + (laborCost + partsCost) * 0.15;
+            const laborCost = totalLaborHours * LABOR_RATE_PER_HOUR;
+            const totalOMCost = (laborCost + totalPartsCost) * (1 + GENERAL_OVERHEAD_PERCENT);
             
             // Calculate savings
+            const baselineLaborCost = baselineData.hours * LABOR_RATE_PER_HOUR;
+            const baselineGrossCost = baselineData.cost / (1 + GENERAL_OVERHEAD_PERCENT);
+            const baselinePartsCost = baselineGrossCost - baselineLaborCost; 
+            
             const techSavings = baselineData.techs - techsRequired;
             const hoursSavings = baselineData.hours - totalLaborHours;
+            const partsSavings = baselinePartsCost - totalPartsCost; 
             const costSavings = baselineData.cost - totalOMCost;
             
             // Update metrics
             document.getElementById('techsRequired').textContent = techsRequired;
-            document.getElementById('annualServices').textContent = totalServices.toLocaleString();
-            document.getElementById('totalHours').textContent = Math.round(totalLaborHours).toLocaleString();
-            document.getElementById('totalCost').textContent = `$${(totalOMCost / 1000000).toFixed(1)}M`;
-            
-            // Update details
             document.getElementById('techDetail').textContent = techSavings > 0 ? 
                 `${techSavings} fewer than baseline` : (techSavings < 0 ? `${Math.abs(techSavings)} more than baseline` : 'At baseline');
+
+            document.getElementById('annualServices').textContent = totalServices.toLocaleString();
+
+            document.getElementById('totalHours').textContent = Math.round(totalLaborHours).toLocaleString();
             document.getElementById('hoursDetail').textContent = hoursSavings > 0 ? 
                 `${Math.round(hoursSavings).toLocaleString()} hrs saved` : (hoursSavings < 0 ? `${Math.round(Math.abs(hoursSavings)).toLocaleString()} hrs increase` : 'At baseline');
+            
+            document.getElementById('totalCost').textContent = `$${(totalOMCost / 1000000).toFixed(1)}M`;
             document.getElementById('costDetail').textContent = costSavings > 0 ? 
                 `$${(costSavings / 1000000).toFixed(1)}M saved` : (costSavings < 0 ? `$${(Math.abs(costSavings) / 1000000).toFixed(1)}M increase` : 'At baseline');
             
             // Show savings alert if significant
-            if (costSavings > 1000000) {
+            if (costSavings > 1000000000) {
                 document.getElementById('savingsAlert').classList.add('show');
                 document.getElementById('savingsAmount').textContent = `$${(costSavings / 1000000).toFixed(1)}M`;
                 document.getElementById('savingsDetails').textContent = 
-                    `${techSavings} fewer technicians | ${Math.round(hoursSavings).toLocaleString()} fewer labor hours`;
+                    `${techSavings} fewer technicians | ${Math.round(hoursSavings).toLocaleString()} fewer labor hours | $${(partsSavings / 1000).toFixed(0)}K parts savings`;
             } else {
                 document.getElementById('savingsAlert').classList.remove('show');
             }
@@ -1168,29 +1020,43 @@
         
         // Load preset scenarios
         function loadPreset(preset) {
-            const presets = {
+            const intervals = {
                 oem: {
                     '250': 250, '750': 750, '6500': 6500, '20000': 20000, '40000': 40000
                 },
                 optimized: {
-                    '250': 325, '750': 975, '6500': 8450, '20000': 26000, '40000': 52000
+                    '250': 325, '750': 1500, '6500': 12000, '20000': 26000, '40000': 52000
                 },
                 aggressive: {
-                    '250': 375, '750': 1300, '6500': 10000, '20000': 30000, '40000': 60000
+                    '250': 375, '750': 4000, '6500': 15000, '20000': 30000, '40000': 60000
                 },
                 minimal: {
-                    '250': 250, '750': 1000, '6500': 6500, '20000': 25000, '40000': 40000
+                    '250': 325, '750': 5000, '6500': 20000, '20000': 40000, '40000': 80000
                 }
-            };
+            }[preset];
             
-            const intervals = presets[preset];
             if (intervals) {
                 Object.keys(intervals).forEach(key => {
                     const inputElement = document.getElementById(`interval-${key}`);
                     if (inputElement) {
+                        // Apply interval change
                         inputElement.value = intervals[key];
                     }
                 });
+                
+                // Set Labor Hours for Optimized Preset (if selected)
+                if (preset === 'optimized') {
+                    document.getElementById('hours-initial').value = 9.0;
+                    document.getElementById('hours-750').value = 7.5;
+                    document.getElementById('hours-6500').value = 20.0;
+                    document.getElementById('hours-8760').value = 9.0;
+                } else {
+                    // Reset Labor Hours for other presets (OEM, Aggressive, Minimal) to default OEM values
+                    document.getElementById('hours-initial').value = 9.9;
+                    document.getElementById('hours-750').value = 8.05;
+                    document.getElementById('hours-6500').value = 22.5;
+                    document.getElementById('hours-8760').value = 10.0;
+                }
                 
                 // Handle enabling/disabling based on preset
                 const enableInitial = document.getElementById('enable-initial');
@@ -1200,41 +1066,52 @@
                 const enable8760 = document.getElementById('enable-8760');
                 const enable20000 = document.getElementById('enable-20000');
                 const enable40000 = document.getElementById('enable-40000');
+                
+                const catalystCheckbox = document.getElementById('catalyst-8760');
 
+                // Reset catalyst checkbox to unchecked (full cost) on preset load
+                if (catalystCheckbox) {
+                    catalystCheckbox.checked = false;
+                }
 
                 if (preset === 'minimal') {
                     if (enableInitial) enableInitial.checked = false;
-                    if (enable250) enable250.checked = false;
-                    if (enable750) enable750.checked = true; // Minimal has 750 (with new value)
+                    if (enable250) enable250.checked = false; 
+                    if (enable750) enable750.checked = true;
                     if (enable6500) enable6500.checked = false;
                     if (enable8760) enable8760.checked = true;
                     if (enable20000) enable20000.checked = false;
                     if (enable40000) enable40000.checked = false;
-                } else {
+                } else if (preset === 'optimized') {
+                    // Optimized preset logic: disable 20K and 40K
                     if (enableInitial) enableInitial.checked = true;
-                    if (enable250) enable250.checked = true;
+                    if (enable250) enable250.checked = false; 
                     if (enable750) enable750.checked = true;
                     if (enable6500) enable6500.checked = true;
                     if (enable8760) enable8760.checked = true;
-                    if (enable20000) enable20000.checked = true;
-                    if (enable40000) enable40000.checked = true;
+                    if (enable20000) enable20000.checked = false; // DISABLED
+                    if (enable40000) enable40000.checked = false; // DISABLED
+                } else {
+                    // OEM (default) and Aggressive
+                    if (enableInitial) enableInitial.checked = true;
+                    if (enable250) enable250.checked = false; // Default off
+                    if (enable750) enable750.checked = true;
+                    if (enable6500) enable6500.checked = true;
+                    if (enable8760) enable8760.checked = true;
+                    if (enable20000) enable20000.checked = true; // Enabled
+                    if (enable40000) enable40000.checked = true; // Enabled
                 }
                 
-                // Update all service cards
+                // Update all service cards 
                 ['initial', 'daily', '250', '750', '6500', '8760', '20000', '40000'].forEach(id => {
                     toggleService(id);
                 });
-                
-                calculatePlan();
+
+                // Crucially, call toggleCatalyst *after* setting the check state and enabling/disabling the input
+                toggleCatalyst(); 
+                // Final calculation happens inside toggleCatalyst or will be called next
+                // calculatePlan(); // Removed here as it's called inside toggleCatalyst
             }
-        }
-        
-        function resetDefaults() {
-            loadPreset('oem');
-        }
-        
-        function compareScenarios() {
-            alert('Scenario comparison feature coming soon!');
         }
         
         // Event listeners
@@ -1251,6 +1128,9 @@
                     });
                 }
             });
+
+            // Specific catalyst toggle listener
+            document.getElementById('catalyst-8760').addEventListener('change', toggleCatalyst);
             
             // Preset buttons
             document.getElementById('preset-oem').addEventListener('click', function() {
@@ -1277,13 +1157,20 @@
                 loadPreset('minimal');
             });
             
-            // Input change listeners
+            // Input change listeners (Ensure the parts-8760 input does *not* fire calculatePlan directly)
             document.querySelectorAll('input[type="number"]').forEach(input => {
-                input.addEventListener('change', calculatePlan);
+                if (input.id !== 'parts-8760') {
+                    input.addEventListener('change', calculatePlan);
+                }
             });
-            
+            // The parts-8760 input needs to listen for changes *not* caused by the catalyst toggle
+            document.getElementById('parts-8760').addEventListener('change', function() {
+                // If a user manually changes the number, we recalculate, but we *don't* change the checkbox state.
+                calculatePlan();
+            });
+
             // Initial calculation
-            calculatePlan();
+            loadPreset('oem'); 
         });
     </script>
 </body>
